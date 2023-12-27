@@ -30,10 +30,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import static fr.pilato.elasticsearch.crawler.fs.framework.FsCrawlerUtil.getACLInformation;
 import static fr.pilato.elasticsearch.crawler.fs.framework.FsCrawlerUtil.getCreationTime;
 import static fr.pilato.elasticsearch.crawler.fs.framework.FsCrawlerUtil.getFileExtension;
 import static fr.pilato.elasticsearch.crawler.fs.framework.FsCrawlerUtil.getFilePermissions;
@@ -60,7 +62,7 @@ public class FileAbstractorFile extends FileAbstractor<File> {
 
     @Override
     public FileAbstractModel toFileAbstractModel(String path, File file) {
-        return new FileAbstractModel(
+		return new FileAbstractModel(
                 file.getName(),
                 file.isFile(),
                 getModificationTime(file),
@@ -72,7 +74,8 @@ public class FileAbstractorFile extends FileAbstractor<File> {
                 file.length(),
                 getOwnerName(file),
                 getGroupName(file),
-                getFilePermissions(file));
+                getFilePermissions(file),
+				getACLInformation(file));
     }
 
     @Override

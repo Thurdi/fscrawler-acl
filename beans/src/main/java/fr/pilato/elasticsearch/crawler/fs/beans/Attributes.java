@@ -28,6 +28,7 @@ public class Attributes {
     private String group;
     private int permissions;
 
+
     public String getOwner() {
         return owner;
     }
@@ -51,4 +52,5 @@ public class Attributes {
     public void setPermissions(int permissions) {
         this.permissions = permissions;
     }
+
 }

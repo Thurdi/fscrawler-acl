@@ -37,6 +37,7 @@ public class File {
     private String url;
     private Integer indexedChars;
     private String checksum;
+	private String ACL;
 
     public String getExtension() {
         return extension;
@@ -124,5 +125,13 @@ public class File {
 
     public String getChecksum() {
         return checksum;
+    }
+		
+	public String getACL() {
+        return ACL;
+    }
+
+    public void setACL(String ACL) {
+        this.ACL = ACL;
     }
 }

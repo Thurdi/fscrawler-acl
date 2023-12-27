@@ -68,7 +68,8 @@ public class FileAbstractorSSH extends FileAbstractor<ChannelSftp.LsEntry> {
                 file.getAttrs().getSize(),
                 Integer.toString(file.getAttrs().getUId()),
                 Integer.toString(file.getAttrs().getGId()),
-                file.getAttrs().getPermissions());
+                file.getAttrs().getPermissions(),
+				null);
     }
 
     @Override

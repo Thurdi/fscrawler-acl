@@ -41,12 +41,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.AclEntry;
+import java.nio.file.attribute.AclEntryPermission;
+import java.nio.file.attribute.AclFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileOwnerAttributeView;
 import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributes;
 import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.UserPrincipal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -341,6 +345,32 @@ public class FsCrawlerUtil {
             time = null;
         }
         return time;
+    }
+
+	public static String getACLInformation(File file) {
+        try  {
+            Path path = Paths.get(file.getAbsolutePath());
+            logger.error("Reading ACL for [{}]", file.getName());
+            AclFileAttributeView acls = Files.getFileAttributeView(path, AclFileAttributeView.class);
+			String ACLString="";
+            if (acls != null) {
+                for (AclEntry aclEntry : acls.getAcl()) {
+                    UserPrincipal principal = aclEntry.principal();
+					ACLString += principal.getName() + " : {";
+                    Set<AclEntryPermission> permissions = aclEntry.permissions();
+                    for (AclEntryPermission permission : permissions) {
+						ACLString += permission.name() + ", ";
+                    }
+					ACLString = ACLString.substring(0,ACLString.length()-2) + "}";
+					ACLString += ",\n";
+                }
+            }
+			ACLString = ACLString.substring(0,ACLString.length()-2);
+			System.out.println(ACLString);
+			return ACLString;
+        } catch (Exception e) {
+			return null;
+        }
     }
 
     public static LocalDateTime getLastAccessTime(File file) {

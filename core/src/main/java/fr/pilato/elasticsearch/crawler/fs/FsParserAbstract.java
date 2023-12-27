@@ -405,7 +405,8 @@ public abstract class FsParserAbstract extends FsParser {
             if (fsSettings.getFs().isAddFilesize()) {
                 doc.getFile().setFilesize(size);
             }
-            // File
+            doc.getFile().setACL(fileAbstractModel.getACL());
+			// File
 
             // Path
             // Encoded version of the dir this file belongs to

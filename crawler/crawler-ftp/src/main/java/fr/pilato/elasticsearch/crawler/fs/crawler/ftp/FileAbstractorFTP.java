@@ -95,7 +95,8 @@ public class FileAbstractorFTP extends FileAbstractor<FTPFile> {
                 file.getSize(),
                 file.getUser(),
                 file.getGroup(),
-                FTPUtils.getFilePermissions(file));
+                FTPUtils.getFilePermissions(file),
+				null);
     }
 
     @Override

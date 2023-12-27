@@ -55,9 +55,10 @@ public class FileAbstractModel {
     private final String group;
     private final int permissions;
     private final String extension;
+	private final String acl;
 
     public FileAbstractModel(String name, boolean file, LocalDateTime lastModifiedDate, LocalDateTime creationDate, LocalDateTime accessDate,
-                             String extension, String path, String fullpath, long size, String owner, String group, int permissions) {
+                             String extension, String path, String fullpath, long size, String owner, String group, int permissions, String acl) {
         this.name = name;
         this.file = file;
         this.directory = !file;
@@ -71,6 +72,7 @@ public class FileAbstractModel {
         this.group = group;
         this.permissions = permissions;
         this.extension = extension;
+		this.acl = acl;
     }
 
     public String getName() {
@@ -124,6 +126,10 @@ public class FileAbstractModel {
     public String getExtension() {
         return extension;
     }
+	
+	public String getACL() {
+        return acl;
+    }
 
     @Override
     public String toString() {
@@ -140,6 +146,7 @@ public class FileAbstractModel {
                 ", extension='" + extension + '\'' +
                 ", fullpath='" + fullpath + '\'' +
                 ", size=" + size +
+				", acl=" + acl +
                 '}';
     }
 }
