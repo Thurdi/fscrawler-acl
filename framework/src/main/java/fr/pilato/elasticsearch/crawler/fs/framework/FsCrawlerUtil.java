@@ -20,6 +20,7 @@ package fr.pilato.elasticsearch.crawler.fs.framework;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
@@ -347,29 +348,28 @@ public class FsCrawlerUtil {
         return time;
     }
 
-	public static String getACLInformation(File file) {
+    public static String getACLInformation(File file) {
         try  {
             Path path = Paths.get(file.getAbsolutePath());
             logger.error("Reading ACL for [{}]", file.getName());
             AclFileAttributeView acls = Files.getFileAttributeView(path, AclFileAttributeView.class);
-			String ACLString="";
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.createObjectNode();
+
             if (acls != null) {
                 for (AclEntry aclEntry : acls.getAcl()) {
                     UserPrincipal principal = aclEntry.principal();
-					ACLString += principal.getName() + " : {";
+                    JsonNode PermissionsArrayNode = objectMapper.createArrayNode();
                     Set<AclEntryPermission> permissions = aclEntry.permissions();
                     for (AclEntryPermission permission : permissions) {
-						ACLString += permission.name() + ", ";
+                        ((com.fasterxml.jackson.databind.node.ArrayNode) PermissionsArrayNode).add(permission.name());
                     }
-					ACLString = ACLString.substring(0,ACLString.length()-2) + "}";
-					ACLString += ",\n";
+                    ((com.fasterxml.jackson.databind.node.ObjectNode) jsonNode).set(principal.getName(), PermissionsArrayNode);
                 }
             }
-			ACLString = ACLString.substring(0,ACLString.length()-2);
-			System.out.println(ACLString);
-			return ACLString;
+            return objectMapper.writeValueAsString(jsonNode);
         } catch (Exception e) {
-			return null;
+            return null;
         }
     }
 
